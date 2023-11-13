@@ -1,46 +1,41 @@
-const _ = require("lodash"),
-uuid = require('uuid'),
-Mockjs = require('apipost-mock');
+//Libraries
+const lodash = require("lodash"),
+  MOCK_EXTENSIONS = require('./constants/extensions'),
+  Mockjs = require('apipost-mock');
 
-// 拓展 mockjs
+const mockjsRandomExtend = {};
 
-/**
- *  拓展mockjs， 定义一些内置 mock
- */
-const _mockjsRandomExtend = {};
+//Clearly explain the purpose of this function
+mockjsRandomExtend.string = function (pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', start, end) {
+  pool = typeof pool === 'string' ? Mockjs.mock(pool) : pool;
 
-new Array('telephone', 'phone', 'mobile').forEach((func) => {
-    _mockjsRandomExtend[func] = function () {
-        return this.pick(['131', '132', '137', '188']) + Mockjs.mock(/\d{8}/);
-    };
-});
-new Array('username', 'user_name', 'nickname', 'nick_name').forEach((func) => {
-    _mockjsRandomExtend[func] = function () {
-        return Mockjs.mock(`@cname`);
-    };
-});
-new Array('avatar', 'icon', 'img', 'photo', 'pic').forEach((func) => {
-    _mockjsRandomExtend[func] = function () {
-        return Mockjs.mock(`@image('400x400')`);
-    };
-});
+  if (typeof pool === 'number') {
+    [start, pool] = [pool, start];
+  }
 
-new Array('description').forEach((func) => {
-    _mockjsRandomExtend[func] = function () {
-        return Mockjs.mock(`@cparagraph`);
-    };
-});
+  try {
+    if (!isNaN(Number(start))) {
+      const size = isNaN(Number(end)) ? start : lodash.random(start, end);
+      return lodash.sampleSize(pool, size).join('');
+    }
+  } catch (ex) { }
 
-new Array('id', 'userid', 'user_id', 'articleid', 'article_id').forEach((func) => {
-    _mockjsRandomExtend[func] = function () {
-        return Mockjs.mock(`@integer(100, 1000)`);
-    };
-});
-
-//空字符串
-_mockjsRandomExtend['empty'] = function () {
-    return '';
+  return lodash.sample(pool);
 };
 
-Mockjs.Random.extend(_mockjsRandomExtend);
-module.exports = Mockjs;
+//Extensions assignment
+lodash.forEach(MOCK_EXTENSIONS, ({ methods, func }) => {
+  methods.forEach((method) => {
+    mockjsRandomExtend[method] = func;
+  });
+});
+
+//Mockjs extension
+Mockjs.Random.extend(mockjsRandomExtend);
+
+//Exports
+module.exports = {
+  Mockjs,
+  extend: MOCK_EXTENSIONS,
+  ...Mockjs,
+}

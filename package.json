@@ -25,6 +25,7 @@
   "homepage": "https://github.com/Apipost-Team/mockjs5#readme",
   "dependencies": {
     "apipost-mock": "^1.0.2",
+    "idcard": "^4.1.1",
     "lodash": "^4.17.21",
     "uuid": "^9.0.1"
   }

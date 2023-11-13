@@ -19,7 +19,7 @@ module.exports = [
   {
     methods: ['address'],
     description: "详细地址",
-    func: () => _.sample([
+    func: () => lodash.sample([
       '上地三街9号',
       '政立路400号',
       '中南路67号',

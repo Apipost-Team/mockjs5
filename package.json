@@ -1,0 +1,31 @@
+{
+  "name": "mockjs5",
+  "version": "1.0.0",
+  "description": "mockjs 拓展.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Apipost-Team/mockjs5.git"
+  },
+  "keywords": [
+    "mockjs",
+    "faker",
+    "mock",
+    "fakerjs",
+    "faker.js"
+  ],
+  "author": "apipost-lab001 <admin@apipost.cn> (https://github.com/Apipost-Team)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Apipost-Team/mockjs5/issues"
+  },
+  "homepage": "https://github.com/Apipost-Team/mockjs5#readme",
+  "dependencies": {
+    "apipost-mock": "^1.0.2",
+    "lodash": "^4.17.21",
+    "uuid": "^9.0.1"
+  }
+}

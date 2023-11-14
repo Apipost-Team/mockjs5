@@ -1,9 +1,19 @@
 //Libraries
-const lodash = require("lodash"),
+const _ = require("lodash"),
   MOCK_EXTENSIONS = require('./constants/extensions'),
+  FAKER_EXTENSIONS = require('./constants/faker'),
   Mockjs = require('apipost-mock');
 
 const mockjsRandomExtend = {};
+
+//Extensions assignment
+_.forEach(FAKER_EXTENSIONS, (item, method) => {
+  method = _.trimStart(method, "$");
+
+  if (!_.isEmpty(method) && _.isFunction(item?.generator)) {
+    mockjsRandomExtend[method] = function () { return item?.generator() };
+  }
+});
 
 //Clearly explain the purpose of this function
 mockjsRandomExtend.string = function (pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', start, end) {
@@ -15,18 +25,18 @@ mockjsRandomExtend.string = function (pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
 
   try {
     if (!isNaN(Number(start))) {
-      const size = isNaN(Number(end)) ? start : lodash.random(start, end);
-      return lodash.sampleSize(pool, size).join('');
+      const size = isNaN(Number(end)) ? start : _.random(start, end);
+      return _.sampleSize(pool, size).join('');
     }
   } catch (ex) { }
 
-  return lodash.sample(pool);
+  return _.sample(pool);
 };
 
 //Extensions assignment
-lodash.forEach(MOCK_EXTENSIONS, ({ methods, func }) => {
+_.forEach(MOCK_EXTENSIONS, ({ methods, generator }) => {
   methods.forEach((method) => {
-    mockjsRandomExtend[method] = func;
+    mockjsRandomExtend[method] = generator;
   });
 });
 
